@@ -1,0 +1,429 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/given-a-linked-list-of-0s-1s-and-2s-sort-it/1
+
+class Node
+{
+    int data;
+    Node next;
+    Node(int data)
+    {
+        this.data = data;
+        next = null;
+    }
+}
+*/
+class Solution
+{
+    //Function to sort a linked list of 0s, 1s and 2s.
+    static Node segregate(Node head)
+    {
+        // add your code here
+        Node oneHead = null;
+        
+        Node twoHead = null;
+        
+        Node zeroHead = null;
+        
+        while(head != null){
+            if(head.data == 0){
+                Node node = new Node(0);
+                node.next = zeroHead;
+                zeroHead = node;
+            } else if(head.data == 1) {
+                Node node = new Node(1);
+                node.next = oneHead;
+                oneHead = node;
+            } else {
+                Node node = new Node(2);
+                node.next = twoHead;
+                twoHead = node;
+            }
+            
+            head = head.next;
+        }
+        
+        Node ansHead = zeroHead;
+        
+        while(zeroHead != null && zeroHead.next != null){
+            zeroHead = zeroHead.next;
+        }
+        
+        if(zeroHead != null){
+            zeroHead.next = oneHead;
+        } else if(oneHead != null){
+            ansHead = oneHead;
+        } else {
+            ansHead = twoHead;
+        }
+        
+        while(oneHead != null && oneHead.next != null){
+            oneHead = oneHead.next;
+        }
+        
+        if(oneHead == null && zeroHead != null && twoHead != null){
+            zeroHead.next = twoHead;
+        } else if(oneHead != null){
+            oneHead.next = twoHead;
+        }  else {
+            
+        }
+        
+        return ansHead;
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/multiply-two-linked-lists/1/
+
+/*Node is defined as
+class Node
+{
+    int data; 
+    Node next;
+    Node(int data) {
+        this.data=data;
+        this.next = null;
+    }
+}*/
+
+class GfG{
+  /*You are required to complete this method */
+   public long multiplyTwoLists(Node l1,Node l2){
+        //add code here.
+        long mod = (long)(1000000007);
+        Node temp1 = l1, temp2 = l2;
+        
+        long num1 = 0, num2 = 0;
+        
+        while(temp1 != null){
+            num1 = (num1 * 10 + temp1.data) % mod;
+            temp1 = temp1.next;
+        }
+        
+        while(temp2 != null){
+            num2 = (num2 * 10 + temp2.data) % mod;
+            temp2 = temp2.next;
+        }
+        
+        // System.out.println(num1);
+        // System.out.println(num2);
+        
+        return (num1 * num2) % mod;
+   }
+}
+
+Problem-3: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode node = new ListNode(-1);
+        node.next = head;
+        
+        ListNode fast = node;
+        ListNode slow = node;
+                
+        if(head.next == null){
+            head = null;
+            return head;
+        }
+        
+        int i = 0;
+        
+        while(i < n){
+            
+            fast = fast.next;
+            i++;
+        }
+        
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next;
+        }
+        
+        // if(slow == head){ 
+        //     head = head.next; // Note that 
+        // }
+        
+        if(slow == node){
+            head = head.next;
+        }
+        
+        slow.next = slow.next.next;
+        
+        return head;
+    }
+}
+
+Problem-4: https://leetcode.com/problems/reorder-list/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    
+    ListNode fleft;
+    
+    public void reorderList(ListNode head) {
+        fleft = head;
+        int size = getSize(head);
+        
+        reorderHelper(head, 0, size);
+    }
+    
+     
+    private void reorderHelper(ListNode right, int floor, int size){
+        if(right == null){
+            return;
+        }
+        
+        reorderHelper(right.next, floor + 1, size);
+        
+        if(floor > size / 2){
+            right.next = fleft.next;
+            fleft.next = right;
+            fleft = right.next;
+        } else if(floor == size / 2){
+            right.next = null;
+        }
+    }
+    
+    private int getSize(ListNode head){
+        int l = 0;
+        
+        ListNode temp = head;
+        
+        while(temp != null){
+            l++;
+            temp = temp.next;
+        }
+        
+        return l;
+    }
+}
+
+Problem-5 : https://practice.geeksforgeeks.org/problems/remove-loop-in-linked-list/1/
+
+/*
+class Node
+{
+    int data;
+    Node next;
+}
+*/
+
+class Solution
+{
+    //Function to remove a loop in the linked list.
+    public static void removeLoop(Node head){
+       // It means no node is present or one node present without loop{as, head.next == null}
+        if (head == null || head.next == null){
+            return;
+        }
+        
+        Node meetNode = Cycle(head);
+        if(meetNode != null){
+            
+          // take one Node from start
+          Node start = head;
+          if(start != meetNode){
+              while (start.next != meetNode.next) {
+                    start = start.next;
+                    meetNode = meetNode.next;
+                }
+                 // Get One previous node of intersection node to make it null
+                meetNode.next = null; 
+            } else {
+              
+              // Get One previous node of intersection node to make it null
+              while(meetNode.next != start) {
+                    meetNode = meetNode.next;
+                }
+                meetNode.next = null;
+            }
+        }
+    
+    }
+    
+    public static Node Cycle(Node head){
+        Node slow = head, fast = head;
+        slow = slow.next;
+        fast = fast.next.next;
+        while(fast != null && fast.next != null ){
+            if(slow == fast){
+                return slow;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return null;
+    }
+    
+    
+}
+
+Problem-6: https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode a = headA, b = headB;
+        while (a != b) {
+            if(a != null && b != null)
+            System.out.println("a =" + a.val + " b = " + b.val);
+            
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+        return a;
+    }
+}
+
+Problem-7 https://www.geeksforgeeks.org/flatten-a-linked-list-with-next-and-child-pointers/
+
+//Without using Queue Data Structure
+
+// Data structure to represent a special linked list node with an
+// additional `down` pointer
+class Node
+{
+    int data;
+    Node next;
+    Node down;
+ 
+    Node(int data) {
+        this.data = data;
+    }
+}
+ 
+class Main
+{
+    // Utility function to print a list with `down` and `next` pointers
+    public static void printOriginalList(Node head)
+    {
+        if (head == null) {
+            return;
+        }
+ 
+        System.out.print(" " + head.data + " ");
+ 
+        if (head.down != null)
+        {
+            System.out.print("[");
+            printOriginalList(head.down);
+            System.out.print("]");
+        }
+ 
+        printOriginalList(head.next);
+    }
+ 
+    // Utility function to print a linked list
+    public static void printFlattenedList(Node head)
+    {
+        while (head != null)
+        {
+            System.out.print(head.data + " -> ");
+            head = head.next;
+        }
+        System.out.println("null");
+    }
+ 
+    // Recursive function to flatten a multilevel linked list
+    public static Node flattenList(Node head)
+    {
+        // base case
+        if (head == null) {
+            return null;
+        }
+ 
+        // keep track of the next pointer
+        Node next = head.next;
+ 
+        // process the down list first
+        head.next = flattenList(head.down);
+ 
+        // go to the last node
+        Node tail = head;
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+ 
+        // process the next list after the down list
+        tail.next = flattenList(next);
+ 
+        // return head node
+        return head;
+    }
+ 
+    public static void main(String[] args)
+    {
+        // create individual nodes and link them together later
+        Node one = new Node(1);
+        Node two = new Node(2);
+        Node three = new Node(3);
+        Node four = new Node(4);
+        Node five = new Node(5);
+        Node six = new Node(6);
+        Node seven = new Node(7);
+        Node eight = new Node(8);
+        Node nine = new Node(9);
+        Node ten = new Node(10);
+        Node eleven = new Node(11);
+        Node twelve = new Node(12);
+        Node thirteen = new Node(13);
+        Node fourteen = new Node(14);
+        Node fifteen = new Node(15);
+ 
+        // set head node
+        Node head = one;
+ 
+        // set next pointers
+        one.next = four;
+        four.next = fourteen;
+        fourteen.next = fifteen;
+        five.next = nine;
+        nine.next = ten;
+        seven.next = eight;
+        eleven.next = thirteen;
+ 
+        // set down pointers
+        one.down = two;
+        two.down = three;
+        four.down = five;
+        five.down = six;
+        six.down = seven;
+        ten.down = eleven;
+        eleven.down = twelve;
+ 
+        System.out.println("The original list is :");
+        printOriginalList(head);
+ 
+        head = flattenList(head);
+        System.out.println("\n\nThe flattened list is :");
+        printFlattenedList(head);
+    }
+}

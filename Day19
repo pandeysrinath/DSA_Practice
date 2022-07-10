@@ -1,0 +1,209 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/implement-two-stacks-in-an-array/1/
+
+/* Structure of the class is
+class TwoStack
+{
+
+	int size;
+	int top1,top2;
+	int arr[] = new int[100];
+
+	TwoStack()
+	{
+		size = 100;
+		top1 = -1;
+		top2 = size;
+	}
+}*/
+
+class Stacks
+{
+    //Function to push an integer into the stack1.
+    void push1(int x, TwoStack sq)
+    {
+        sq.top1++;
+        sq.arr[sq.top1] = x;
+    }
+
+    //Function to push an integer into the stack2.
+    void push2(int x, TwoStack sq)
+    {
+        sq.top2--;
+        sq.arr[sq.top2] = x;
+    }
+
+    //Function to remove an element from top of the stack1.
+    int pop1(TwoStack sq)
+    {
+        if(sq.top1 > -1){
+            int ele = sq.arr[sq.top1];
+            sq.top1--;
+            return ele;
+        }
+        
+        return -1;
+    }
+
+    //Function to remove an element from top of the stack2.
+    int pop2(TwoStack sq)
+    {
+       if(sq.top2 < 100){
+            int ele = sq.arr[sq.top2];
+            sq.top2++;
+            return ele;
+        }
+        
+        return -1;
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/evaluation-of-postfix-expression1735/1/
+
+class Solution
+{
+    //Function to evaluate a postfix expression.
+    public static int evaluatePostFix(String S)
+    {
+        // Your code here
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0 ; i < S.length() ; i++){
+            char ch = S.charAt(i);
+           
+            if(Character.isDigit(ch)){
+                st.push(ch - '0');
+            } else {
+                int v1 = st.pop();
+                int v2 = st.pop();
+                   
+                int res = operation(v1 , v2 , ch);
+                st.push(res);
+            }
+        } 
+        return st.peek();
+   }
+    
+    public static int operation(int v1 , int v2 , char ch){
+       if(ch == '+'){
+           return v1 + v2;
+       }else if(ch == '-'){
+           return v2 - v1;
+       }else if(ch == '*'){
+           return v1 * v2;
+       }else{
+           return v2 / v1;
+       }
+   } 
+}
+
+Problem-3: https://leetcode.com/problems/implement-stack-using-queues/
+
+class MyStack {
+    Deque<Integer> dq;
+    public MyStack() {
+        dq = new ArrayDeque<Integer>();
+    }
+    
+    public void push(int x) {
+        dq.offerFirst(x);
+    }
+    
+    public int pop() {
+        return dq.pollFirst();
+    }
+    
+    public int top() {
+        return dq.peekFirst();
+    }
+    
+    public boolean empty() {
+        if(dq.size() == 0)
+            return true;
+        else 
+            return false;
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+Problem-4: https://practice.geeksforgeeks.org/problems/queue-reversal/1
+
+class GfG{
+    //Function to reverse the queue.
+    public Queue<Integer> rev(Queue<Integer> q){
+        //add code here.
+        Stack<Integer> st = new Stack<>();
+        
+        while(q.size() > 0){
+            st.push(q.poll());
+        }
+        
+        while(st.size() > 0){
+            q.offer(st.pop());
+        }
+        
+        return q;
+    }
+}
+
+Problem-5: https://www.geeksforgeeks.org/implement-stack-queue-using-deque/
+
+Reead the full article
+
+Problem-6: https://practice.geeksforgeeks.org/problems/reverse-first-k-elements-of-queue/1
+
+class GfG {
+    // Function to reverse first k elements of a queue.
+    public Queue<Integer> modifyQueue(Queue<Integer> q, int k) {
+        // add code here.
+        Stack<Integer> st = new Stack<Integer>(); // Stack to store elements to reverse
+        // step 1 - fetch k element from que and store into stack
+        for(int i = 0; i < k ; i++) //
+           st.push(q.poll());
+       
+        //step 2 - fetch k element from stack and put into que
+        while(st.size() > 0)
+            q.add(st.pop());
+       
+       //step 3 - fetch first n-k element from que and put back to stack only
+       int remSize = q.size() - k;
+       
+       while(remSize > 0){
+           q.offer(q.poll());
+           remSize--;
+       }
+           
+       
+       return q;
+    }
+}
+
+Problem-7: https://practice.geeksforgeeks.org/problems/delete-middle-element-of-a-stack/1/
+
+class Solution
+{
+    //Function to delete middle element of a stack.
+    public void deleteMid(Stack<Integer>s,int sizeOfStack){
+        // code here
+        Stack<Integer> sh = new Stack<>();
+        
+        int i = 0;
+        while(i != sizeOfStack / 2){
+            sh.push(s.pop());
+            i++;
+        }
+        
+        if(s.size() > 0)
+            s.pop();
+            
+        while(sh.size() > 0){
+            s.push(sh.pop());
+        }
+    } 
+}

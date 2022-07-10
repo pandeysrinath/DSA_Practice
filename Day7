@@ -1,0 +1,192 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/smallest-window-in-a-string-containing-all-the-characters-of-another-string-1587115621/
+
+class Solution
+{
+    //Function to find the smallest window in the string s consisting
+    //of all the characters of string p.
+    public static String smallestWindow(String s, String p){
+        // Your code here
+        String ans = "";
+        
+        HashMap<Character, Integer> map2 = new HashMap<>();
+        
+        for(int i = 0; i < p.length(); i++){
+            char ch = p.charAt(i);
+            map2.put(ch, map2.getOrDefault(ch, 0) + 1);
+        }
+        
+        int mct = 0;
+        int dmct = p.length();
+        
+        HashMap<Character, Integer> map1 = new HashMap<>();
+        int i = -1;
+        int j = -1;
+        
+        while(true){
+            boolean f1 = false, f2 = false;
+            
+            // Acquire
+            while(i < s.length() - 1 && mct < dmct){
+                i++;
+                char ch = s.charAt(i);
+                map1.put(ch, map1.getOrDefault(ch, 0) + 1);
+                
+                if(map1.getOrDefault(ch, 0) <= map2.getOrDefault(ch, 0)){
+                    mct++;
+                }
+                
+                f1 = true; 
+            }
+            
+            // Collect answer and release
+            while(j < i && mct == dmct){
+                
+                String pans = s.substring(j + 1, i + 1);
+                
+                if(ans.length() == 0 || pans.length() < ans.length()){
+                    ans = pans;
+                }
+                
+                j++;
+                
+                char ch = s.charAt(j);
+                
+                if(map1.get(ch) == 1){
+                    map1.remove(ch);
+                } else {
+                    map1.put(ch, map1.get(ch) - 1);
+                }
+                
+                if(map1.getOrDefault(ch, 0) < map2.getOrDefault(ch, 0)){
+                    mct--;
+                }
+                
+                f2 = true;
+            }
+            
+            if(f1 == false && f2 == false){
+                break;
+            }
+        }
+        
+        if(ans.length() == 0)
+            return "-1";
+            
+        return ans;
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/wildcard-string-matching1126/1
+
+class Solution{
+    static boolean match(String wild, String pattern)
+    {
+        //Using Dynamic programing (Diagonal Traversal of 2d matrix)
+        boolean[][] dp = new boolean[wild.length() + 1][pattern.length() + 1];
+        
+        for(int i = dp.length - 1; i >= 0; i--){
+            for(int j = dp[0].length - 1; j >= 0; j--){
+                if(i == dp.length - 1 && j == dp[0].length - 1){
+                    dp[i][j] = true;
+                } else if(i == dp.length - 1){
+                    dp[i][j] = false;
+                } else if(j == dp[0].length - 1){
+                    if(wild.charAt(i) == '*'){
+                        dp[i][j] = dp[i + 1][j];
+                    } else {
+                        dp[i][j] = false;
+                    }
+                } else {
+                    if(wild.charAt(i) == '?'){
+                        dp[i][j] = dp[i + 1][j + 1];
+                    } else if(wild.charAt(i) == '*'){
+                        dp[i][j] = dp[i + 1][j] || dp[i][j + 1];
+                    } else if(wild.charAt(i) == pattern.charAt(j)){
+                        dp[i][j] = dp[i + 1][j + 1];
+                    } else {
+                        dp[i][j] = false;
+                    }
+                    
+                }
+            }
+        }
+        
+        return dp[0][0];
+    }
+}
+
+Problem-3: https://practice.geeksforgeeks.org/problems/longest-prefix-suffix2527/1
+
+class Solution {
+    int lps(String s) {
+        // Using KMP Algorithm (TC: o(n), SC: O(n))
+        int n = s.length();
+        
+        int[] lps = new int[n];
+        int i = 0, j = 1;
+        lps[0] = 0;
+        
+        while(j < n){
+            if(s.charAt(i) == s.charAt(j)){
+                lps[j] = i + 1 ;
+                i++;
+                j++;
+                
+            }else{
+                if(i == 0){
+                    lps[j] = 0;
+                    j++;
+                }else{
+                    i = lps[i-1];
+                }
+            }
+        }
+        
+        return lps[n-1];
+    }
+}
+
+Problem-4: https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/
+
+Problem-5: https://practice.geeksforgeeks.org/problems/b6b3297ccfb1ad5f66a9c2b92979170417adf114/1/
+
+class Solution
+{
+    int transfigure (String A, String B)
+    {
+    	// Your code goes here.
+    	if(A.length() != B.length())
+    	    return -1;
+    	    
+    	int[] freq = new int[256];
+    	
+    	for(int i = 0; i < A.length(); i++){
+    	    freq[(int)A.charAt(i)]++;
+    	    freq[(int)B.charAt(i)]--;
+    	}
+    	    
+    	for(int i = 0; i < freq.length; i++){
+    	    if(freq[i] != 0)
+    	        return -1;
+    	}
+    	
+    	int i = A.length() - 1, j = i;
+    	int count = 0;
+    	
+    	while(j >= 0 && i >= 0){
+    	    if(A.charAt(i) == B.charAt(j)){
+    	        i--;
+    	        j--;
+    	    } else {
+    	        count++;
+    	        i--;
+    	    }
+    	}
+    	
+    	return count;
+    }
+}
+
+Problem-6: https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/
+
+Problem-7: https://practice.geeksforgeeks.org/problems/word-wrap1646/1

@@ -1,0 +1,300 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/count-triplets-with-sum-smaller-than-x5549/1/#
+
+class Solution
+{
+    long countTriplets(long nums[], int n, int target) {
+        long count = 0;
+        Arrays.sort(nums);
+        
+        for(int i = 0; i < n - 2; i++){
+            int left = i+1;
+            int right = n - 1;
+            
+            while(left < right){
+                long curr_sum = nums[i] + nums[left] + nums[right];
+                
+                if(curr_sum < target){
+                    count += right - left;
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        
+        return count;
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/max-sum-without-adjacents2430/1/#
+
+class Solution {
+    int findMaxSum(int arr[], int n) {
+        // code here
+        int excl = 0;
+        int incl = arr[0];
+        
+        for(int i = 1; i < n; i++){
+            int newExcl = Math.max(excl, incl);
+            
+            incl = excl + arr[i];
+            excl = newExcl;
+        }
+        
+        return Math.max(excl, incl);
+    }
+}
+
+Problem-3: https://practice.geeksforgeeks.org/problems/merge-two-sorted-arrays-1587115620/1
+
+class Solution
+{
+    //Function to merge the arrays.
+    public static void merge(long arr1[], long arr2[], int n, int m) 
+    {
+        // code here 
+        int i = 0, j = 0, k = arr1.length - 1;
+        
+        while(i <= k && j < m){
+            if(arr1[i] > arr2[j]){
+                long temp = arr2[j];
+                arr2[j] = arr1[k];
+                arr1[k] = temp;
+                j++;
+                k--;
+            } else {
+                i++;
+                //continue;
+            }
+        }
+        
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+    }
+}
+
+Problem-4: https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1
+
+class Solution
+{
+    static long merge(long [] arr, long l, long m, long r){
+        long n1 = m - l + 1;
+        long n2 = r - m;
+        long count = 0;
+        
+        long [] arr1 = new long[(int)n1];
+        long [] arr2 = new long[(int)n2];
+       
+        for (int i = 0; i < n1; i++){
+            arr1[i] = arr[(int)l + i];
+        }
+        
+        for (int i = 0; i < n2; i++){
+            arr2[i] = arr[(int)m + 1 + i];
+        }
+        
+        int k = (int)l;
+        int p1 = 0, p2 = 0;
+        
+        while (p1 < n1 && p2 < n2){
+            if (arr1[p1] > arr2[p2]){
+                arr[k++] = arr2[p2++];
+                count += n1 - p1;
+            }
+            
+            else if (arr1[p1] < arr2[p2]){
+                arr[k++] = arr1[p1++];
+            }
+            
+            else
+                arr[k++] = arr1[p1++];
+        }
+        
+        while (p1 < n1)
+            arr[k++] = arr1[p1++];
+        while (p2 < n2)
+            arr[k++] = arr2[p2++];
+            
+        return count;
+    }
+    
+    static long mergeCount(long [] arr, long l, long r){
+        long count = 0;
+        
+        if (l < r){
+            long m = (l + r) / 2;
+            
+            count += mergeCount(arr, l, m);
+            count += mergeCount(arr, m + 1, r);
+            count += merge(arr, l, m, r);
+        }
+        
+        return count;
+    }
+
+    static long inversionCount(long arr[], long N)
+    {
+        return mergeCount(arr, 0, N - 1);
+    }
+}
+
+Problem-5: https://practice.geeksforgeeks.org/problems/find-duplicates-in-an-array/1
+
+class Solution {
+    public static ArrayList<Integer> duplicates(int arr[], int n) { 
+        // code here
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+              
+        for(int i = 0; i < arr.length; i++){
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+            
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+            
+        for(int key: map.keySet()){
+            if(map.get(key) > 1){
+                ans.add(key);
+            }
+        }    
+            
+        if(ans.size() == 0){
+            ans.add(-1);
+        }
+            
+        Collections.sort(ans);
+            
+        return ans;
+        
+    }
+}
+
+Problem-6: https://www.geeksforgeeks.org/radix-sort/
+
+// The lower bound for Comparison based sorting algorithm (Merge Sort, Heap Sort, Quick-Sort .. etc) is Ω(nLogn), i.e., 
+// they cannot do better than nLogn. Counting sort is a linear time sorting algorithm that sort in O(n+k) time when elements 
+// are in the range from 1 to k.
+
+// What if the elements are in the range from 1 to n2? 
+
+// We can’t use counting sort because counting sort will take O(n2) which is worse than comparison-based sorting algorithms.
+// Can we sort such an array in linear time? 
+
+// Radix Sort is the answer. The idea of Radix Sort is to do digit by digit sort starting from least significant digit to most significant digit. 
+// Radix sort uses counting sort as a subroutine to sort.
+
+// The Radix Sort Algorithm
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void radixSort(int[] arr) {
+        // write code here    
+        int max = Integer.MIN_VALUE;
+        for(int val: arr){
+        if(val > max){
+            max = val;
+        }
+        }
+
+        int exp = 1;
+        while(exp <= max){
+        countSort(arr,exp);
+        exp = exp * 10;
+        }
+    }
+
+    public static void countSort(int[] arr, int exp) {
+        int[] ans = new int[arr.length];
+        //make frequency arr
+        int[] farr = new int[10];
+
+        for(int i = 0; i < arr.length; i++){
+            farr[arr[i] / exp % 10]++;
+        }
+        //converts it into prefix sum array
+        for(int i = 1; i < farr.length; i++){
+            farr[i] = farr[i] + farr[i - 1];
+        }
+        //stable sorting(filling ans array)
+        for(int i = arr.length - 1; i >= 0; i--){
+            int pos = farr[arr[i] / exp % 10] - 1;
+            ans[pos] = arr[i];
+            farr[arr[i] / exp % 10]--;
+        }
+        //filling original array with the help of ans array
+        for(int i = 0; i < ans.length; i++){
+            arr[i] = ans[i];
+        }
+
+        System.out.print("After sorting on " + exp + " place -> ");
+        print(arr);
+    }
+
+    public static void print(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+        System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) throws Exception {
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+        arr[i] = scn.nextInt();
+        }
+        radixSort(arr);
+        print(arr);
+    }
+
+}
+
+Problem-7: https://practice.geeksforgeeks.org/problems/product-array-puzzle4525/1
+
+class Solution 
+{ 
+	public static long[] productExceptSelf(int arr[], int n) 
+	{ 
+        // code 
+        long[] res = new long[n];
+        
+        long prod = 1;
+        
+        int count = 0;
+        
+        boolean flag = false;
+        
+        for(int i = 0; i < n; i++) {
+            if(arr[i] == 0){
+                flag = true;
+                count++;
+                continue;
+            }
+            prod *= (long)arr[i];
+        }
+        
+        if(count > 1){
+            
+            for(int i = 0; i < n; i++){
+                res[i] = 0;
+            }
+            
+        } else {
+            
+            for(int i = 0; i < n; i++){
+                if(arr[i] == 0)
+                  res[i] = prod;
+                 else if(flag == true){
+                     res[i] = 0;
+                 } else {
+                  res[i] = prod/(long)arr[i];
+                }
+            }
+        }
+        
+        return res;
+	} 
+} 

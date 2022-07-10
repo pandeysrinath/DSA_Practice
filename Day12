@@ -1,0 +1,230 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1#
+
+class Solution 
+{
+    //Function to find minimum number of pages.
+    public static int findPages(int[]A,int N,int M)
+    {
+        //Your code here
+        int sum = 0, max = 0;
+        
+        for(int val: A){
+            sum += val;
+            max = Math.max(max,val);
+        }
+        
+        int lo = max, hi = sum, ans = 0;
+        
+        while(lo <= hi){
+            int mid = lo + (hi - lo)/2;
+            
+            if(isPossible(A, mid, M)){
+                ans = mid;
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    private static boolean isPossible(int[] arr, int mid, int m){
+        int st = 1;
+        int sum = 0;
+        
+        for(int i = 0; i < arr.length; i++){
+            sum += arr[i];
+            if(sum > mid){
+                st++;
+                sum = arr[i];
+            }
+        }
+        
+        return (st <= m);
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/minimum-swaps/1/
+
+Problem-3: https://leetcode.com/problems/reverse-linked-list/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        
+        if(head == null)
+            return head;
+        
+        ListNode temp = head;
+        ListNode nxt = head.next;
+        ListNode prev = null;
+        
+        while(temp != null){
+            nxt = temp.next;
+            temp.next = prev;
+            prev = temp;
+            head = temp;
+            temp = nxt;   
+        }
+        
+        return head;
+    }
+}
+
+Problem-4: https://leetcode.com/problems/linked-list-cycle/
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while(slow != null && fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            
+            if(slow == fast)
+                return true;
+        }
+        
+        return false;
+    }
+}
+
+Problem-5: https://leetcode.com/problems/merge-two-sorted-lists/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode temp1 = list1;
+        ListNode temp2 = list2;
+        
+        ListNode ans = new ListNode(-1);
+        ListNode ansHead = ans;
+        
+        while(temp1 != null && temp2 != null){
+            if(temp1.val < temp2.val){
+                ListNode node = new ListNode(temp1.val);
+                ans.next = node;
+                temp1 = temp1.next;
+            } else {
+                ListNode node = new ListNode(temp2.val);
+                ans.next = node;
+                temp2 = temp2.next;
+            }
+            ans = ans.next;
+        }
+        
+        while(temp1 != null){
+            ListNode node = new ListNode(temp1.val);
+            ans.next = node;
+            temp1 = temp1.next;
+            ans = ans.next;
+        }
+        
+        while(temp2 != null){
+            ListNode node = new ListNode(temp2.val);
+            ans.next = node;
+            temp2 = temp2.next;
+            ans = ans.next;
+        }
+        
+        ansHead = ansHead.next;
+        
+        return ansHead;
+    }
+}
+
+Problem-6: https://leetcode.com/problems/delete-node-in-a-linked-list/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void deleteNode(ListNode node) {
+        
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+}
+
+Problem-7: https://practice.geeksforgeeks.org/problems/remove-duplicates-from-an-unsorted-linked-list/1/
+
+/* The structure of linked list is the following
+class Node
+{
+    int data;
+    Node next;
+    Node(int d) {
+        data = d; 
+        next = null;
+    }
+}
+*/
+
+class Solution
+{
+    //Function to remove duplicates from unsorted linked list.
+    public Node removeDuplicates(Node head) 
+    {
+        // Your code here
+        HashSet<Integer> set = new HashSet<>();
+        
+        Node temp = head, prev = null;
+        
+        while(temp != null){
+            set.add(temp.data);
+            temp = temp.next;
+        }
+        
+        temp = head;
+        
+        while (temp != null) {
+            if (set.contains(temp.data)) {
+                set.remove(temp.data);
+                prev = temp;
+                temp = temp.next;
+            } else {
+                prev.next = temp.next;
+                temp.next = null;
+                temp = prev.next;
+            }
+        }
+        
+        return head;
+    }
+}

@@ -1,0 +1,225 @@
+Problem-1: https://leetcode.com/problems/valid-palindrome/
+
+class Solution {
+    public boolean isPalindrome(String s) {
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            
+            if(Character.isLetterOrDigit(ch))
+                sb.append(ch + "");
+        }
+        
+        int lo = 0;
+        int hi = sb.length() - 1;
+        
+        while(lo < hi){
+            char st = Character.toLowerCase(sb.charAt(lo));
+            char en = Character.toLowerCase(sb.charAt(hi));
+            
+            int comp = Character.compare(st, en);  
+            if(comp != 0){
+                return false;
+            }
+            
+            lo++;
+            hi--;
+        }
+        
+        return true;
+    }
+}
+
+Problem-2: https://leetcode.com/problems/valid-anagram/
+
+My Solution
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            if(map.containsKey(ch)){
+                map.put(ch, map.get(ch) + 1);
+            } else {
+                map.put(ch, 1);
+            }
+        }
+        
+        for(int i = 0; i < t.length(); i++){
+            char ch = t.charAt(i);
+            if(map.containsKey(ch)){
+                map.put(ch, map.get(ch) - 1);
+            } else {
+                map.put(ch, 1);
+            }
+        }
+        
+        for (Map.Entry mapElement : map.entrySet()) {
+            char key = (char)mapElement.getKey();
+ 
+            int value = (int)mapElement.getValue();
+            
+            if(value != 0)
+                return false;
+        }
+        
+        return true;
+    }
+}
+
+Alternate Solution
+
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        if (s.length() != t.length()) return false;
+        
+        int[] alphabet = new int[26];
+        for (char c : s.toCharArray()) {
+            alphabet[c - 'a']++;
+        }
+        for (char c : t.toCharArray()) {
+            alphabet[c - 'a']--;
+        }
+        
+        for (int i = 0; i < 26; i++) {
+            if (alphabet[i] != 0)
+                return false;
+        }
+        return true;
+    }
+}
+
+Problem-3: https://leetcode.com/problems/valid-parentheses/
+
+class Solution {
+   public boolean isValid(String s) {
+        
+        Stack<Character> st = new Stack<>();
+        
+        for(int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            
+            if(isOpening(ch))
+                st.push(ch);
+            else {
+                if(st.isEmpty())
+                    return false;
+                else if(!isMatching(st.peek(), ch))
+                    return false;
+                else
+                    st.pop();
+            }
+        }
+        
+        return st.isEmpty();
+    }
+    
+    private boolean isOpening(char ch){
+        return (ch == '(' || ch == '{' || ch == '[');
+    }
+    
+    private boolean isMatching(char a, char b){
+        return ( a == '(' && b == ')') || 
+               ( a == '{' && b == '}') || 
+               ( a == '[' && b == ']');
+    }
+}
+
+Problem-4: https://practice.geeksforgeeks.org/problems/consecutive-elements2306/1
+
+class Solution{
+    public String removeConsecutiveCharacter(String S){
+        Stack<Character> st = new Stack<>();
+        
+        for(int i = 0; i < S.length(); i++){
+            
+            char ch = S.charAt(i);
+            
+            if(st.isEmpty() || st.peek() != ch){
+                st.push(ch);
+            }
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        
+        while(st.size() > 0){
+            char ch = st.pop();
+            sb.append(ch + "");
+        }
+        
+        sb.reverse();
+        
+        return sb.toString();
+    }
+}
+
+Problem-5: https://leetcode.com/problems/longest-common-prefix/
+
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs.length == 0)
+        return "";
+        
+        String prefix = strs[0];
+        
+        for(int i = 1; i < strs.length; i++) {
+            while(strs[i].indexOf(prefix) != 0)
+            prefix = prefix.substring(0, prefix.length()-1);
+        }
+        
+        return prefix;
+    }
+}
+
+Problem-6: https://practice.geeksforgeeks.org/problems/convert-a-sentence-into-its-equivalent-mobile-numeric-keypad-sequence0547/1
+
+class Solution 
+{ 
+    String printSequence(String S) 
+    { 
+        // code here
+        String keyComb[] = {"2","22","222", "3","33","333","4","44","444","5","55","555","6","66","666", "7","77","777","7777","8","88","888","9","99","999","9999"};
+        
+        StringBuilder sb = new StringBuilder();
+        //String ans = "";
+        for(int i = 0 ; i < S.length(); i++){
+            if(S.charAt(i)==' ') 
+                sb.append("0");
+                //ans += "0";
+            else 
+                sb.append(keyComb[S.charAt(i)-'A']);
+                //ans += keyComb[S.charAt(i)-'A'];
+        }
+        
+        return sb.toString();
+        ///return ans;
+    }
+}
+
+Problem-7: https://practice.geeksforgeeks.org/problems/remove-all-duplicates-from-a-given-string4321/1
+
+class Solution {
+    String removeDuplicates(String str) {
+        // code here
+        HashMap<Character, Integer> map = new HashMap<>();
+        
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i = 0; i < str.length(); i++){
+            char ch = str.charAt(i);
+            
+            if(!map.containsKey(ch)){
+                map.put(ch, 1);
+                sb.append(ch + "");
+            } else {
+                map.put(ch, map.get(ch) + 1);
+            }
+        }
+        
+        return sb.toString();
+    }
+}

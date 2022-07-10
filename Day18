@@ -1,0 +1,401 @@
+Problem-1: https://leetcode.com/problems/merge-k-sorted-lists/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists.length == 0 || lists == null)
+            return null;
+        
+        int interval = 1;
+        
+        while(interval < lists.length){
+            for(int i = 0; i + interval < lists.length; i = i + interval*2){
+                lists[i] = mergeTwoLists(lists[i], lists[i + interval]);
+            }
+            interval = interval * 2;
+        }
+        
+        return lists[0];
+    }
+    
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode temp1 = list1;
+        ListNode temp2 = list2;
+        
+        ListNode ans = new ListNode(-1);
+        ListNode ansHead = ans;
+        
+        while(temp1 != null && temp2 != null){
+            if(temp1.val < temp2.val){
+                ListNode node = new ListNode(temp1.val);
+                ans.next = node;
+                temp1 = temp1.next;
+            } else {
+                ListNode node = new ListNode(temp2.val);
+                ans.next = node;
+                temp2 = temp2.next;
+            }
+            ans = ans.next;
+        }
+        
+        while(temp1 != null){
+            ListNode node = new ListNode(temp1.val);
+            ans.next = node;
+            temp1 = temp1.next;
+            ans = ans.next;
+        }
+        
+        while(temp2 != null){
+            ListNode node = new ListNode(temp2.val);
+            ans.next = node;
+            temp2 = temp2.next;
+            ans = ans.next;
+        }
+        
+        ansHead = ansHead.next;
+        
+        return ansHead;
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/sort-a-linked-list/1/
+
+/*
+class Node
+{
+    int data;
+    Node next;
+    Node(int key)
+    {
+        this.data = key;
+        next = null;
+    }
+} */
+
+class Solution
+{
+    //Function to sort the given linked list using Merge Sort.
+    static Node mergeSort(Node head)
+    {
+        // add your code here
+        if(head.next == null || head == null){
+            return head;
+        }
+        
+        Node midNode = getMiddle(head);
+        Node left = head;
+        Node right = midNode.next;
+        midNode.next = null;
+        
+        Node lsl = mergeSort(left);
+        Node rsl = mergeSort(right);
+        
+        Node ansNode = mergeList(lsl, rsl);
+        
+        return ansNode;
+    }
+
+    private static Node getMiddle(Node head)
+    {
+        // Your code here.
+        Node slow = head;
+        Node fast = head.next;
+         
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        
+        return slow;
+    }
+    
+    private static Node mergeList(Node left, Node right){
+        
+        Node ansHead = null;
+        Node n = new Node(-1);
+        ansHead = n;
+        Node tempAns = n;
+        
+        while(left != null && right != null){
+            int lv = left.data;
+            int rv = right.data;
+            
+            if(lv < rv){
+                Node node = new Node(lv);
+                tempAns.next = node;
+                left = left.next;
+            } else {
+                Node node = new Node(rv);
+                tempAns.next = node;
+                right = right.next;
+            }
+            
+            tempAns = tempAns.next;
+        }
+        
+        while(left != null){
+            Node node = new Node(left.data);
+            tempAns.next = node;
+            left = left.next;
+            tempAns = tempAns.next;
+        }
+        
+        while(right != null){
+            Node node = new Node(right.data);
+            tempAns.next = node;
+            right = right.next;
+            tempAns = tempAns.next;
+        }
+        
+        ansHead = ansHead.next;
+        
+        return ansHead;
+    }
+}
+
+Problem-3: https://leetcode.com/problems/add-two-numbers/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode temp1 = l1;
+        ListNode temp2 = l2;
+        
+        ListNode ans = new ListNode(-1);
+        
+        ListNode anshead = ans;
+          
+        int carry = 0;
+        
+        while(temp1 != null && temp2 != null){
+            int val1 = temp1.val;
+            int val2 = temp2.val;
+            
+            int sum = val1 + val2 + carry;
+            
+            if(sum < 10){
+                ListNode newNode = new ListNode(sum);
+                ans.next = newNode;
+                ans = ans.next;
+                carry = 0;
+            } else {
+                carry = sum / 10;
+                int val = sum % 10;
+                
+                ListNode newNode = new ListNode(val);
+                ans.next = newNode;
+                ans = ans.next;
+            }
+            
+            temp1 = temp1.next;
+            temp2 = temp2.next;
+        }
+        
+        while(temp1 != null){
+            int sum = temp1.val + carry;
+            
+            if(sum < 10){
+                ListNode newNode = new ListNode(sum);
+                ans.next = newNode;
+                ans = ans.next;
+                carry = 0;
+            } else {
+                carry = sum / 10;
+                int val = sum % 10;
+                
+                ListNode newNode = new ListNode(val);
+                ans.next = newNode;
+                ans = ans.next;
+            }
+            
+            temp1 = temp1.next;
+        }
+        
+        while(temp2 != null){
+            int sum = temp2.val + carry;
+            
+            if(sum < 10){
+                ListNode newNode = new ListNode(sum);
+                ans.next = newNode;
+                ans = ans.next;
+                carry = 0;
+            } else {
+                carry = sum / 10;
+                int val = sum % 10;
+                ListNode newNode = new ListNode(val);
+                ans.next = newNode;
+                ans = ans.next;
+            }
+            
+            temp2 = temp2.next;
+        }
+        
+        if(carry == 1){
+            ListNode node = new ListNode(1);
+            ans.next = node;
+            node.next = null;
+        }
+        
+        anshead = anshead.next;
+        return anshead;
+    }
+}
+
+Problem-4: https://practice.geeksforgeeks.org/problems/flattening-a-linked-list/1/
+
+class Node
+{
+	int data;
+	Node next;
+	Node bottom;
+	
+	Node(int d)
+	{
+		data = d;
+		next = null;
+		bottom = null;
+	}
+}
+*/
+/*  Function which returns the  root of 
+    the flattened linked list. */
+class GfG
+{
+    Node flatten(Node root)
+    {
+	    // Your code herei
+	    if(root == null || root.next == null)
+	    return root;
+	    
+	    Node nxt = null;
+	    
+	    while(root != null && root.next != null){
+	        nxt = root.next.next;
+	        Node node = merge(root, root.next);
+	        root = node;
+	        node.next = nxt;
+	    }
+	    
+	    return root;
+    }
+    
+    Node merge(Node head1, Node head2){
+        Node ansHead = new Node(-1);
+        Node ans = ansHead;
+        
+        while(head1 != null && head2 != null){
+            if(head1.data < head2.data){
+                Node node = new Node(head1.data);
+                ans.bottom = node;
+                head1 = head1.bottom;
+            } else {
+                Node node = new Node(head2.data);
+                ans.bottom = node;
+                head2 = head2.bottom;
+            }
+            ans = ans.bottom;
+        }
+        
+        while(head1 != null){
+            Node node = new Node(head1.data);
+            ans.bottom = node;
+            ans = ans.bottom;
+            head1 = head1.bottom;
+        }
+        
+        while(head2 != null){
+            Node node = new Node(head2.data);
+            ans.bottom = node;
+            ans = ans.bottom;
+            head2 = head2.bottom;
+        }
+        
+        ansHead = ansHead.bottom;
+        
+        return ansHead;
+    }
+}
+
+Problem-5: https://www.geeksforgeeks.org/a-linked-list-with-next-and-arbit-pointer/
+
+/*
+class Node {
+    int data;
+    Node next, arb;
+
+    Node(int d) 
+    { 
+        data = d;
+        next = arb = null; 
+        
+    }
+}*/
+
+class Clone {
+    //Function to clone a linked list with next and random pointer.
+    Node copyList(Node head) {
+        // your code here
+        
+        // Copy current list to new list with next pointer;
+        Node temp = head;
+        Node ansHead = new Node(-1);
+        Node prev = ansHead;
+        
+        while(temp != null){
+           
+            Node node = new Node(temp.data);
+            prev.next = node;
+            prev = prev.next;
+            temp = temp.next;
+        }
+        
+        ansHead = ansHead.next;
+        
+        // Map the nodes
+        HashMap<Node, Node> hm = new HashMap<>();
+        
+        temp = head;
+        Node tempCpy = ansHead;
+        
+        while(temp != null){
+            hm.put(temp, tempCpy);
+            temp = temp.next;
+            tempCpy = tempCpy.next;
+        }
+        
+        temp = head;
+        
+        while(temp != null){
+            Node cpyNode = hm.get(temp);
+            
+            if(cpyNode != null && temp != null)
+                cpyNode.arb = hm.get(temp.arb);
+            
+            temp = temp.next;
+        }
+        
+        return ansHead;
+    }
+}
+
+Problem-6 https://www.geeksforgeeks.org/quicksort-on-singly-linked-list/
+
+Problem-7: https://www.geeksforgeeks.org/subtract-two-numbers-represented-as-linked-lists/

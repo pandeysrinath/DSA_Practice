@@ -1,0 +1,504 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/linked-list-in-zig-zag-fashion/1
+
+/*
+class Node {
+    int data;
+    Node next;
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
+
+*/
+
+class Solution{
+	public static Node zigZag(Node head){
+        //add code here.
+        boolean flag = true;
+        
+        Node temp = head;
+        
+        while(temp.next!=null){
+            if(flag){
+                if(temp.data > temp.next.data) {
+                    int t = temp.data;
+                    temp.data = temp.next.data;
+                    temp.next.data = t;
+                }
+            }else{
+                if(temp.data < temp.next.data) {
+                    int t = temp.data;
+                    temp.data = temp.next.data;
+                    temp.next.data = t;
+                }
+            }
+            
+            flag = !flag;
+            temp=temp.next;
+        }
+        return head;
+    }
+}
+
+Problem-2: https://practice.geeksforgeeks.org/problems/reverse-a-doubly-linked-list/1
+
+/*
+class Node
+{
+    int data;
+    Node next, prev;
+    Node(int data)
+    {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+
+*/
+public static Node reverseDLL(Node head)
+{
+    //Your code here
+    while(true){
+        Node previous = head.next;
+        head.next = head.prev;
+        head.prev = previous;
+        
+        if(previous == null){
+            return head;
+        }
+        
+        head = previous;
+    }
+}
+
+Problem-3: https://practice.geeksforgeeks.org/problems/delete-nodes-having-greater-value-on-right/1/
+
+/*
+class Node {
+   int data;
+   Node next;
+
+  Node(int data) {
+      this.data = data;
+  }
+}
+*/
+class Solution
+{
+    Node compute(Node head)
+    {
+        // your code here
+        head = reverseList(head);
+        
+        int maxVal = Integer.MIN_VALUE;
+        Node ansHead = null;
+        
+        if(head.data >= maxVal){
+            maxVal = head.data;
+            Node ans = new Node(head.data);
+            ansHead = ans;
+            head = head.next;
+        }
+        
+        while(head != null){
+            int val = head.data;
+            if(val >= maxVal){
+                maxVal = val;
+                Node node = new Node(val);
+                node.next = ansHead;
+                ansHead = node;
+            }
+            head = head.next;
+        }
+        
+        return ansHead;
+    }
+    
+    Node reverseList(Node head) {
+        // code here
+        Node prev = null;
+        Node current = head;
+        Node nxt = null;
+       
+        while(current != null){
+            nxt = current.next;
+            current.next = prev;
+            prev = current;
+            current = nxt;
+        }
+       
+       head = prev;
+       
+       return head;
+    }
+}
+
+Problem-4: https://practice.geeksforgeeks.org/problems/segregate-even-and-odd-nodes-in-a-linked-list5035/1
+
+class Solution{
+    Node divide(int N, Node head){
+        // code here
+        Node even = new Node(-1);
+        Node evenHead = even;
+        
+        Node odd = new Node(-1);
+        Node oddHead = odd;
+        
+        Node ansHead = even;
+        
+        while(head != null){
+            int val = head.data;
+            if(val % 2 == 0){
+                Node node = new Node(val);
+                even.next = node;
+                even = even.next;
+            } else {
+                Node node = new Node(val);
+                odd.next = node;
+                odd = odd.next;
+            }
+            
+            head = head.next;
+        }
+        
+        even.next = oddHead.next;
+        ansHead = ansHead.next;
+        
+        return ansHead;
+    }
+}
+
+Problem-5: https://www.geeksforgeeks.org/point-to-next-higher-value-node-in-a-linked-list-with-an-arbitrary-pointer/
+
+//User function Template for Java
+/*
+class Node
+{
+    int data;
+    Node next;
+    Node(int key)
+    {
+        this.data = key;
+        next = null;
+    }
+} */
+
+class Solution
+{
+    //Function to sort the given linked list using Merge Sort.
+    static Node mergeSort(Node head)
+    {
+        // add your code here
+        if(head.next == null || head == null){
+            return head;
+        }
+        
+        Node midNode = getMiddle(head);
+        Node left = head;
+        Node right = midNode.next;
+        midNode.next = null;
+        
+        Node lsl = mergeSort(left);
+        Node rsl = mergeSort(right);
+        
+        Node ansNode = mergeList(lsl, rsl);
+        
+        return ansNode;
+    }
+
+    private static Node getMiddle(Node head)
+    {
+        // Your code here.
+        Node slow = head;
+        Node fast = head.next;  // Note: if we replace fast = head then stackoverflow error occour
+         
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        
+        return slow;
+    }
+    
+    private static Node mergeList(Node left, Node right){
+        
+        Node ansHead = null;
+        Node n = new Node(-1);
+        ansHead = n;
+        Node tempAns = n;
+        
+        while(left != null && right != null){
+            int lv = left.data;
+            int rv = right.data;
+            
+            if(lv < rv){
+                Node node = new Node(lv);
+                tempAns.next = node;
+                left = left.next;
+            } else {
+                Node node = new Node(rv);
+                tempAns.next = node;
+                right = right.next;
+            }
+            
+            tempAns = tempAns.next;
+        }
+        
+        while(left != null){
+            Node node = new Node(left.data);
+            tempAns.next = node;
+            left = left.next;
+            tempAns = tempAns.next;
+        }
+        
+        while(right != null){
+            Node node = new Node(right.data);
+            tempAns.next = node;
+            right = right.next;
+            tempAns = tempAns.next;
+        }
+        
+        ansHead = ansHead.next;
+        
+        return ansHead;
+    }
+}
+
+Problem-6: https://practice.geeksforgeeks.org/problems/reorder-list/1/
+
+/*class Node
+{
+    int data;
+    Node next;
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}*/
+
+class gfg {
+    
+    Node fleft;
+    
+    Node reorderlist(Node head) {
+        // Your code here
+        fleft = head;
+        int size = getSize(head);
+        reorderHelper(head, 0, size);
+        return head;
+        
+    }
+    
+    private void reorderHelper(Node right, int floor, int size){
+        if(right == null){
+            return;
+        }
+        
+        reorderHelper(right.next, floor + 1, size);
+        
+        if(floor > size / 2){
+            right.next = fleft.next;
+            fleft.next = right;
+            fleft = right.next;
+        } else if(floor == size / 2){
+            right.next = null;
+        }
+    }
+    
+    private int getSize(Node head){
+        int l = 0;
+        
+        Node temp = head;
+        
+        while(temp != null){
+            l++;
+            temp = temp.next;
+        }
+        
+        return l;
+    }
+}
+
+Problem-7: https://www.geeksforgeeks.org/sort-biotonic-doubly-linked-list/
+
+/*
+Approach: Find the first node in the list which is smaller than its previous node. Let it be current. 
+If no such node is present then list is already sorted. Else split the list into two lists, 
+first starting from head node till the current’s previous node and second starting from current node till the end of the list. 
+Reverse the second doubly linked list. Refer this post. Now merge the first and second sorted doubly linked list. 
+Refer merge procedure of this post. The final merged list is the required sorted doubly linked list.
+*/
+
+// Java implementation to sort the
+// biotonic doubly linked list
+class GFG
+{
+ 
+    // a node of the doubly linked list
+    static class Node
+    {
+        int data;
+        Node next;
+        Node prev;
+    }
+    
+    // Function to reverse a Doubly Linked List
+    static Node reverse( Node head_ref)
+    {
+        Node temp = null;
+        Node current = head_ref;
+    
+        // swap next and prev for all nodes
+        // of doubly linked list
+        while (current != null)
+        {
+            temp = current.prev;
+            current.prev = current.next;
+            current.next = temp;
+            current = current.prev;
+        }
+    
+        // Before changing head, check for the cases
+        // like empty list and list with only one node
+        if (temp != null)
+            head_ref = temp.prev;
+            return head_ref;
+    }
+    
+    // Function to merge two sorted doubly linked lists
+    static Node merge(Node first, Node second)
+    {
+        // If first linked list is empty
+        if (first == null)
+            return second;
+    
+        // If second linked list is empty
+        if (second == null)
+            return first;
+    
+        // Pick the smaller value
+        if (first.data < second.data)
+        {
+            first.next = merge(first.next, second);
+            first.next.prev = first;
+            first.prev = null;
+            return first;
+        }
+        else
+        {
+            second.next = merge(first, second.next);
+            second.next.prev = second;
+            second.prev = null;
+            return second;
+        }
+    }
+    
+    // function to sort a biotonic doubly linked list
+    static Node sort(Node head)
+    {
+        // if list is empty or if it contains
+        // a single node only
+        if (head == null || head.next == null)
+            return head;
+    
+        Node current = head.next;
+    
+        while (current != null)
+        {
+    
+            // if true, then 'current' is the first node
+            // which is smaller than its previous node
+            if (current.data < current.prev.data)
+                break;
+    
+            // move to the next node
+            current = current.next;
+        }
+    
+        // if true, then list is already sorted
+        if (current == null)
+            return head;
+    
+        // split into two lists, one starting with 'head'
+        // and other starting with 'current'
+        current.prev.next = null;
+        current.prev = null;
+    
+        // reverse the list starting with 'current'
+        current = reverse(current);
+    
+        // merge the two lists and return the
+        // final merged doubly linked list
+        return merge(head, current);
+    }
+    
+    // Function to insert a node at the beginning
+    // of the Doubly Linked List
+    static Node push( Node head_ref, int new_data)
+    {
+        // allocate node
+        Node new_node = new Node();
+    
+        // put in the data
+        new_node.data = new_data;
+    
+        // since we are adding at the beginning,
+        // prev is always null
+        new_node.prev = null;
+    
+        // link the old list off the new node
+        new_node.next = (head_ref);
+    
+        // change prev of head node to new node
+        if ((head_ref) != null)
+            (head_ref).prev = new_node;
+    
+        // move the head to point to the new node
+        (head_ref) = new_node;
+        return head_ref;
+    }
+    
+    // Function to print nodes in a given doubly
+    // linked list
+    static void printList( Node head)
+    {
+        // if list is empty
+        if (head == null)
+            System.out.println("Doubly Linked list empty");
+    
+        while (head != null)
+        {
+            System.out.print(head.data + " ");
+            head = head.next;
+        }
+    }
+    
+    // Driver Code
+    public static void main(String args[])
+    {
+        Node head = null;
+    
+        // Create the doubly linked list:
+        // 2<.5<.7<.12<.10<.6<.4<.1
+        head = push(head, 1);
+        head = push(head, 4);
+        head = push(head, 6);
+        head = push(head, 10);
+        head = push(head, 12);
+        head = push(head, 7);
+        head = push(head, 5);
+        head = push(head, 2);
+    
+        System.out.println("Original Doubly linked list:n");
+        printList(head);
+    
+        // sort the biotonic DLL
+        head = sort(head);
+    
+        System.out.println("\nDoubly linked list after sorting:n");
+        printList(head);
+    }
+}
+ 

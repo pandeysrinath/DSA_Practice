@@ -1,0 +1,76 @@
+Problem-1: https://practice.geeksforgeeks.org/problems/print-diagonally4331/1#
+
+class Solution{
+    static ArrayList<Integer> downwardDigonal(int n, int A[][])
+    {
+        // code here 
+        ArrayList<Integer> ans = new ArrayList<>();
+        
+        for(int i = 0; i < n; i++){
+            for(int j = i; j >= 0; j--){
+                ans.add(A[i - j][j]);
+            }
+        }
+        
+        for(int i = 1; i < n; i++){
+            for(int j = n - 1; j >= i; j--){
+                ans.add(A[(n - 1) - j + i][j]);
+            }
+        }
+        
+        return ans;
+    }
+}
+
+Problem-2: https://leetcode.com/problems/spiral-matrix/
+
+class Solution {
+    public List<Integer> spiralOrder(int[][] arr) {
+        
+        int r = arr.length;
+        int c = arr[0].length;
+        
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        int minRow = 0;
+        int maxRow = r-1;
+        int minClm = 0;
+        int maxClm = c-1;
+    
+        int count = 0;
+        int limit = r*c;
+    
+    
+        while(count < limit){
+            
+            for(int i = minRow, j = minClm; j <= maxClm && count < limit; j++){
+                res.add(arr[i][j]);
+                count++;
+            }
+            minRow++;
+            
+            for(int i = minRow, j = maxClm; i <= maxRow && count < limit; i++){
+                res.add(arr[i][j]);
+                count++;
+            }
+            maxClm--;
+            
+            for(int i = maxRow, j = maxClm; j >= minClm && count < limit; j--){
+                res.add(arr[i][j]);
+                count++;
+            }
+            maxRow--;
+           
+            for(int i = maxRow, j = minClm; i >= minRow && count < limit; i--){
+                res.add(arr[i][j]);
+                count++;
+            }
+            minClm++;
+    
+          
+    
+           
+        }
+    return res;
+        
+    }
+}

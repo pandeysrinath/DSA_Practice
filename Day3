@@ -1,0 +1,171 @@
+Problem-1: https://leetcode.com/submissions/detail/681465542/
+
+class Solution {
+    public int maxArea(int[] height) {
+        int lo = 0;
+        int hi = height.length - 1;
+        
+        int maxAr = 0;
+        
+        while(lo < hi){
+            int width = hi - lo;
+            int hight = Math.min(height[hi], height[lo]);
+            
+            maxAr = Math.max(maxAr, width*hight);
+            
+            if(height[lo] < height[hi]){
+                lo++;
+            } else {
+                hi--;
+            }
+        }
+        return maxAr;
+    }
+}
+
+Problem-2: https://www.geeksforgeeks.org/given-a-sorted-and-rotated-array-find-if-there-is-a-pair-with-a-given-sum/
+
+// Java program to find a pair with a given
+// sum in a sorted and rotated array
+class PairInSortedRotated
+{
+	// This function returns true if arr[0..n-1]
+	// has a pair with sum equals to x.
+	static boolean pairInSortedRotated(int arr[], int n, int x)
+	{
+		// Find the pivot element
+		int i;
+		for (i = 0; i < n - 1; i++)
+			if (arr[i] > arr[i+1])
+				break;
+				
+		int lo = (i + 1) % n; // lo is now index of smallest element
+						
+		int hi = i;	 // r is now index of largest element
+	
+		// Keep moving either l or r till they meet
+		while (lo != hi)
+		{
+			// If we find a pair with sum x, we return true
+			if (arr[lo] + arr[hi] == x)
+				return true;
+	
+			// If current pair sum is less, move to the higher sum
+			if (arr[lo] + arr[hi] < x)
+				lo = (lo + 1) % n;
+				
+			else // Move to the lower sum side
+				hi = (n + r - 1) % n;
+		}
+		return false;
+	} 
+}
+
+Problem-3 https://practice.geeksforgeeks.org/problems/kth-smallest-element5635/1
+
+class Solution{
+    public static int kthSmallest(int[] arr, int l, int r, int k) 
+    { 
+        //Your code here
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        
+        for(int i = 0; i < k; i++){
+            pq.add(arr[i]);
+        }
+        
+        for(int i = k; i < arr.length; i++){
+            if(arr[i] < pq.peek()){
+                pq.poll();
+                pq.add(arr[i]);
+            }
+        }
+        
+        return pq.peek();
+    } 
+}
+
+//Time Complexity : n.log(k)
+//Space Complexity : log(k) 
+
+Problem-4: https://practice.geeksforgeeks.org/problems/8a644e94faaa94968d8665ba9e0a80d1ae3e0a2d/1/
+
+public int[][] overlappedInterval(int[][] Intervals)
+    {
+        // Code here // Code here
+        Pair[] pairs = new Pair[Intervals.length];
+        
+        for(int i = 0; i < Intervals.length; i++){
+            pairs[i] = new Pair(Intervals[i][0], Intervals[i][1]);
+        }
+        
+        Arrays.sort(pairs);
+        
+        Stack<Pair> st = new Stack<>();
+        
+        for(int i = 0; i < pairs.length; i++){
+            if(i == 0)
+                st.push(pairs[0]);
+            else {
+                Pair top = st.peek();
+                
+                if(pairs[i].st > top.et){
+                    st.push(pairs[i]);
+                } else {
+                    top.et = Math.max(top.et, pairs[i].et);
+                }
+            }
+        }
+        
+        int[][] res = new int[st.size()][2];
+        
+        int k = st.size() - 1;
+        
+        while(st.size() > 0){
+            Pair top = st.pop();
+            res[k][0] = top.st;
+            res[k][1] = top.et;
+            k--;
+        }
+        
+        return res;
+    }
+    
+    public static class Pair implements Comparable<Pair> {
+        int st;
+        int et;
+        
+        Pair(int st, int et){
+            this.st = st;
+            this.et = et;
+        }
+        
+        // this > other return +ve
+        // this = other return 0
+        // this < other return -ve
+        public int compareTo(Pair other) {
+            if(this.st != other.st){
+                return this.st - other.st;
+            } else {
+                return this.et - other.et;
+            }
+        }
+    }
+
+    Problem-5 https://www.geeksforgeeks.org/find-minimum-number-of-merge-operations-to-make-an-array-palindrome/
+
+    Problem-6 https://practice.geeksforgeeks.org/problems/largest-number-formed-from-an-array1117/1/
+
+    class Solution {
+    String printLargest(String[] arr) {
+        // code here
+       Arrays.sort(arr,(x,y) -> (y+x).compareTo(x+y));  // Sorting of object in perticular ordering (Comparator, Comparable, lambda, Inner Class)
+       StringBuilder sb = new StringBuilder();
+       for(String x:arr){
+           sb.append(x);
+       }
+       return sb.toString();
+
+    }
+
+    // Read Comparator, Compairable, lambda, Inner Class
+}
