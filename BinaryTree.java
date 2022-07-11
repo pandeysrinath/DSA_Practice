@@ -80,6 +80,7 @@ public class BinaryTree {
             System.out.print(queue.peek().data + " ");
             for (; count > 0; count--) {
                 Node node = queue.poll();
+                assert node != null;
                 if (node.right != null) {
                     queue.offer(node.right);
                 }
@@ -114,13 +115,38 @@ public class BinaryTree {
             }
         }
     }
+
+    public static int getSize(Node root){
+        // Size of BT: Total number of nodes in Binary Tree
+        if(root == null)
+            return 0;
+
+        return 1 + getSize(root.left) + getSize(root.right);
+    }
+
+    public static int getSum(Node root){
+        // getSum returns the addition of all nodes in Binary Tree.
+        if (root == null){
+            return 0;
+        }
+
+        return root.data + getSum(root.left) + getSum(root.right);
+    }
+
+    public static int getHeight(Node root){
+        // getHeight returns the number of edges present between root node and deepest leaf node.
+        if (root == null){
+            return -1;
+        }
+
+        return 1 + Math.max(getHeight(root.left), getHeight(root.right));
+    }
 }
 
 class Main{
     public static void main(String[] args) {
         int[] arr = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
         Node root = BinaryTree.buildBinaryTree(arr);
-        System.out.println(root.data);
         BinaryTree.inorderTraversal(root);
         System.out.println();
         BinaryTree.preOrderTraversal(root);
@@ -132,5 +158,9 @@ class Main{
         BinaryTree.rightViewOfBinaryTree(root);
         System.out.println();
         BinaryTree.leftViewOfBinaryTree(root);
+        System.out.println();
+        System.out.println("Size of Binary Tree: " + BinaryTree.getSize(root));
+        System.out.println("Sum of all the nodes of Binary Tree: " + BinaryTree.getSum(root));
+        System.out.println("Height of Binary Tree: " + BinaryTree.getHeight(root));
     }
 }
