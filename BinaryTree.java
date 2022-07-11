@@ -1,7 +1,9 @@
 package Tree;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class BinaryTree {
     static int  idx = -1;
@@ -33,8 +35,8 @@ public class BinaryTree {
         }
 
         System.out.print(root.data + " ");
-        inorderTraversal(root.left);
-        inorderTraversal(root.right);
+        preOrderTraversal(root.left);
+        preOrderTraversal(root.right);
     }
 
     public static void postOrderTraversal(Node root){
@@ -42,8 +44,8 @@ public class BinaryTree {
             return;
         }
 
-        inorderTraversal(root.left);
-        inorderTraversal(root.right);
+        postOrderTraversal(root.left);
+        postOrderTraversal(root.right);
         System.out.print(root.data + " ");
     }
 
@@ -141,15 +143,59 @@ public class BinaryTree {
 
         return 1 + Math.max(getHeight(root.left), getHeight(root.right));
     }
+    private static class Pair{
+        Node node;
+        int state;
+
+        public Pair(Node node, int state) {
+            this.node = node;
+            this.state = state;
+        }
+    }
+
+    public static void preInPostOrderTraversalIterative(Node root, ArrayList<Integer> preLst, ArrayList<Integer> inLst, ArrayList<Integer> postLst){
+        if (root == null)
+            return;
+
+        Stack<Pair> st = new Stack<>();
+        Pair rtp = new Pair(root, 1);
+        st.push(rtp);
+
+        while (st.size() > 0){
+            Pair top = st.peek();
+            if(top.state == 1){
+                preLst.add(top.node.data);
+                top.state++;
+
+                if (top.node.left != null){
+                    Pair lp = new Pair(top.node.left, 1);
+                    st.push(lp);
+                }
+
+            } else if(top.state == 2){
+                inLst.add(top.node.data);
+                top.state++;
+
+                if (top.node.right != null){
+                    Pair rp = new Pair(top.node.right, 1);
+                    st.push(rp);
+                }
+            } else {
+                postLst.add(top.node.data);
+                st.pop();
+            }
+        }
+
+    }
 }
 
 class Main{
     public static void main(String[] args) {
         int[] arr = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
         Node root = BinaryTree.buildBinaryTree(arr);
-        BinaryTree.inorderTraversal(root);
-        System.out.println();
         BinaryTree.preOrderTraversal(root);
+        System.out.println();
+        BinaryTree.inorderTraversal(root);
         System.out.println();
         BinaryTree.postOrderTraversal(root);
         System.out.println();
@@ -162,5 +208,12 @@ class Main{
         System.out.println("Size of Binary Tree: " + BinaryTree.getSize(root));
         System.out.println("Sum of all the nodes of Binary Tree: " + BinaryTree.getSum(root));
         System.out.println("Height of Binary Tree: " + BinaryTree.getHeight(root));
+
+        ArrayList<Integer> pre = new ArrayList<>();
+        ArrayList<Integer> in = new ArrayList<>();
+        ArrayList<Integer> post = new ArrayList<>();
+
+        BinaryTree.preInPostOrderTraversalIterative(root, pre, in, post);
+        System.out.println(pre + " " + in + " " + post);
     }
 }
