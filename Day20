@@ -1,0 +1,97 @@
+Problem-1: https://www.geeksforgeeks.org/stack-set-2-infix-to-postfix/
+
+class Solution {
+   // Function to convert an infix expression to a postfix expression.
+  
+   public static String infixToPostfix(String s) {
+       // Your code here
+       
+        Stack<Character> st=new Stack<>();
+        String ans = new String();
+       
+        for(int i = 0; i < s.length();i++){
+           if(Character.isLetterOrDigit(s.charAt(i))){
+               ans += s.charAt(i);
+            } else if(s.charAt(i) == '('){
+                st.push(s.charAt(i));
+            } else if(s.charAt(i) == ')'){
+                while(!st.empty() && st.peek() != '('){
+                   ans+=st.pop();
+                }
+                if(!st.empty()){
+                   st.pop();
+                }
+            } else {
+                while(!st.empty() && prec(st.peek()) >= prec(s.charAt(i)) ){
+                   ans += st.pop();
+                }
+                st.push(s.charAt(i));
+            }
+        }
+       
+        while(!st.empty()){
+           ans += st.pop();
+        }
+        
+        return ans;
+   }
+}
+
+Problem-2: https://www.geeksforgeeks.org/design-and-implement-special-stack-data-structure/
+
+class GfG{
+    int min = Integer.MAX_VALUE;
+    
+	public void push(int a, Stack<Integer> s) {
+	    //add code here.
+	    if(s.size() == 0){
+	        s.push(a);
+	        min = a;
+	    } else {
+	        if(a < min){
+	            int val = 2 * a - min;
+	            s.push(val);
+	            min = a;
+	        } else {
+	            s.push(a);
+	        }
+	    }
+	}
+	
+	public int pop(Stack<Integer> s) {
+        //add code here.
+        int val = s.pop();
+        if(val < min){
+            int v = min;
+            min = min * 2 - v;
+            return min;
+        } else {
+            return min;
+        }
+	}
+	
+	public int min(Stack<Integer> s) {
+           //add code here.
+           return min;
+	}
+	
+	public boolean isFull(Stack<Integer> s, int n) {
+           //add code here.
+           return s.size() == n;
+	}
+	
+	public boolean isEmpty(Stack<Integer> s) {
+           //add code here.
+           return s.size() == 0;
+	}
+}
+
+Problem-3: https://www.geeksforgeeks.org/length-of-the-longest-valid-substring/
+
+Problem-4: https://www.geeksforgeeks.org/find-expression-duplicate-parenthesis-not/
+
+Problem-5: https://www.geeksforgeeks.org/stack-permutations-check-if-an-array-is-stack-permutation-of-other/
+
+Problem-6: https://www.geeksforgeeks.org/count-natural-numbers-whose-permutation-greater-number/
+
+Problem-7: https://www.geeksforgeeks.org/sort-a-stack-using-recursion/
