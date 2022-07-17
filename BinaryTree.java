@@ -187,6 +187,35 @@ public class BinaryTree {
         }
 
     }
+
+    static class DiaPair{
+        int ht;
+        int dia;
+    }
+
+    public static int diameter(Node root){
+        return diameter1(root).dia;
+    }
+
+    private static DiaPair diameter1(Node root){
+        if(root == null){
+            DiaPair bp = new DiaPair();
+            bp.ht = -1;
+            bp.dia = 0;
+            return bp;
+        }
+
+        DiaPair lp = diameter1(root.left);
+        DiaPair rp = diameter1(root.right);
+
+        DiaPair np = new DiaPair();
+        np.ht = Math.max(lp.ht, rp.ht) + 1;
+
+        int fes = lp.ht + rp.ht + 2;
+        np.dia = Math.max(fes, Math.max(lp.dia, rp.dia));
+
+        return np;
+    }
 }
 
 class Main{
@@ -215,5 +244,6 @@ class Main{
 
         BinaryTree.preInPostOrderTraversalIterative(root, pre, in, post);
         System.out.println(pre + " " + in + " " + post);
+        System.out.println(BinaryTree.diameter(root));
     }
 }
