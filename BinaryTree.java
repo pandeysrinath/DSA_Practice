@@ -57,6 +57,7 @@ public class BinaryTree {
             int count = queue.size();
             for (;count > 0; count--){
                 Node node = queue.poll();
+                assert node != null;
                 System.out.print(node.data + " ");
                 if(node.left != null){
                     queue.offer(node.left);
@@ -216,6 +217,44 @@ public class BinaryTree {
 
         return np;
     }
+
+    public static ArrayList<Node> path;
+
+    public static boolean find(Node node, int data){
+        if (node == null)
+            return false;
+
+        if (node.data == data){
+            path.add(node);
+            return true;
+        }
+
+        boolean filc = find(node.left, data);
+        if (filc){
+            path.add(node);
+            return true;
+        }
+
+        boolean firc = find(node.right, data);
+        if (firc){
+            path.add(node);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void printKthLevel(Node root, int k){
+        if (root == null || k < 0)
+            return;
+
+        if (k == 0){
+            System.out.println(root.data);
+        }
+
+        printKthLevel(root.left, k - 1);
+        printKthLevel(root.right, k - 1);
+    }
 }
 
 class Main{
@@ -245,5 +284,13 @@ class Main{
         BinaryTree.preInPostOrderTraversalIterative(root, pre, in, post);
         System.out.println(pre + " " + in + " " + post);
         System.out.println(BinaryTree.diameter(root));
+
+        BinaryTree.path = new ArrayList<>();
+        BinaryTree.find(root, 6);
+        for (Node i : BinaryTree.path){
+            int val = i.data;
+            System.out.print(val + " -> ");
+        }
+        BinaryTree.printKthLevel(root, 2);
     }
 }
