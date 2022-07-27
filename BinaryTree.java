@@ -189,6 +189,69 @@ public class BinaryTree {
 
     }
 
+
+    public static ArrayList<Integer> boundary(Node node){
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        if(isLeaf(node)){
+            ans.add(node.data);
+            return ans;
+        }
+
+        ans.add(node.data);
+        leftBoundary(node.left, ans);
+        leafBoundary(node, ans);
+        rightBoundary(node.right, ans);
+        return ans;
+    }
+
+    private static void leftBoundary(Node node, ArrayList<Integer> ans){
+        while(node != null) {
+            if(!isLeaf(node))
+                ans.add(node.data);
+            if(node.left == null)
+                node = node.right;
+            else
+                node = node.left;
+        }
+
+    }
+
+    private static void leafBoundary(Node node, ArrayList<Integer> ans){
+        if(node == null)
+            return;
+        if(isLeaf(node))
+            ans.add(node.data);
+
+        leafBoundary(node.left, ans);
+        leafBoundary(node.right, ans);
+    }
+
+    private static void rightBoundary(Node node, ArrayList<Integer> ans){
+
+        Stack<Integer> st = new Stack<>();
+
+        while(node != null) {
+            if(!isLeaf(node))
+                st.push(node.data);
+            if(node.right == null)
+                node = node.left;
+            else
+                node = node.right;
+        }
+
+        while(st.size() > 0){
+            ans.add(st.pop());
+        }
+    }
+
+   private static boolean isLeaf(Node node){
+        if(node != null && node.left == null && node.right == null)
+            return true;
+        else
+            return false;
+    }
+
     static class DiaPair{
         int ht;
         int dia;
