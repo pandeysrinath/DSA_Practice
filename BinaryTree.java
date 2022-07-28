@@ -70,6 +70,25 @@ public class BinaryTree {
         }
     }
 
+    public static void diagonalTraversal(Node root){
+        Queue<Node> q = new ArrayDeque<>();
+        q.offer(root);
+
+        while(q.size() > 0){
+            int size = q.size();
+            while(size-- > 0){
+                Node node = q.poll();
+                while(node != null){
+                    if(node.left != null){
+                        q.offer(node.left);
+                    }
+                    System.out.print(node.data + " ");
+                    node = node.right;
+                }
+            }
+        }
+    }
+
     public static void rightViewOfBinaryTree(Node root){
         if(root == null){
             return;
