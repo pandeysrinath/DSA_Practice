@@ -1,4 +1,4 @@
-package Tree;
+package Tree.BinaryTree;
 
 public class Node {
     int data;
