@@ -27,6 +27,7 @@ public class BinarySearchTree extends BinaryTree{
             return root.data;
     }
 
+    @Override
     protected int getMin(Node root){
         if (root.left != null)
             return getMin(root.left);
