@@ -67,7 +67,7 @@ public class BinaryTree {
                     queue.offer(node.right);
                 }
             }
-
+            System.out.println();
         }
     }
 
@@ -163,6 +163,20 @@ public class BinaryTree {
         }
 
         return 1 + Math.max(getHeight(root.left), getHeight(root.right));
+    }
+
+    protected int getMax(Node root){
+        if(root == null){
+            return Integer.MIN_VALUE;
+        }
+        return Math.max(root.data, Math.max(getMax(root.left), getMax(root.right)));
+    }
+
+    protected int getMin(Node root){
+        if(root == null){
+            return Integer.MAX_VALUE;
+        }
+        return Math.min(root.data, Math.min(getMin(root.left), getMin(root.right)));
     }
 
     private static class Pair {
