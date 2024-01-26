@@ -18,6 +18,7 @@ public class BinaryTree {
         newNode.left = buildBinaryTree(nodes);
         newNode.right = buildBinaryTree(nodes);
         return newNode;
+
     }
 
     public static void inorderTraversal(Node root) {
